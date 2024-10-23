@@ -75,14 +75,15 @@ int Screen::DrawVerticalMenu(int x, int y, const char* text, int icon, bool sele
     SDL_Color color = selected ? Gfx::COLOR_TEXT : Gfx::COLOR_ALT_TEXT;
     
     if (selected) {
-        Gfx::DrawRectFilled(x - 30 , y, 10, 70, Gfx::COLOR_BARS);
+        Gfx::DrawRectFilled(x - 38 , y - 42, 466, 122, Gfx::COLOR_BARS);
+        Gfx::DrawRectFilled(x - 38 + 9 , y - 42 + 9, 466 - 18, 122 - 18, Gfx::COLOR_ALT_BACKGROUND);
+        Gfx::DrawRectFilled(x - 38 + 20 , y - 20, 6, 77, Gfx::COLOR_BARS);
     } 
 
-    const int iconWidth = Gfx::GetIconWidth(52, icon) + 10;
+    const int iconWidth = Gfx::GetIconWidth(40, icon) + 10;
 
-    Gfx::DrawIcon(x, y + 10, 50, color, icon, Gfx::ALIGN_LEFT);
+    Gfx::DrawIcon(x, y + 3, 40, color, icon, Gfx::ALIGN_TOP);
+    Gfx::Print(x + iconWidth, y - 5, 40, color, text, Gfx::ALIGN_TOP);
 
-    Gfx::Print(x + iconWidth, y, 52, color, text, Gfx::ALIGN_LEFT);
-
-    return y + 100; 
+    return y + 122; 
 }
