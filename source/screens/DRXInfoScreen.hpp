@@ -17,4 +17,13 @@ private:
     ScreenList mExtIdList;
 
     ScreenList mDRHList;
+
+    enum MenuSection {
+        DRC_INFO,
+        DRC_EXT,
+        DRH_INFO,
+        SECTION_COUNT
+    };
+
+    MenuSection selectedSection;
 };

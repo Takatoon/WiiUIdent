@@ -1,4 +1,5 @@
 #include "DRXInfoScreen.hpp"
+#include "Gfx.hpp"
 #include "Utils.hpp"
 #include <span>
 
@@ -71,7 +72,7 @@ const char* kRegionStrings[] = {
 
 }
 
-DRXInfoScreen::DRXInfoScreen()
+DRXInfoScreen::DRXInfoScreen() : selectedSection(DRC_INFO)
 {
     CCRCDCSoftwareVersion softwareVersion;
     if (CCRCDCSoftwareGetVersion(CCR_CDC_DESTINATION_DRC0, &softwareVersion) == 0) {
@@ -147,23 +148,46 @@ void DRXInfoScreen::Draw()
 {
     DrawTopBar("DRC/DRH Information");
 
-    int yOff = 128;
-    yOff = DrawHeader(32, yOff, 896, 0xf11b, "DRC Info");
-    yOff = DrawList(32, yOff, 896, mDRCList);
-    yOff = DrawHeader(32, yOff, 896, 0xf0cb, "DRC Ext IDs");
-    yOff = DrawList(32, yOff, 896, mExtIdList);
+    // Left sidebar
+    Gfx::DrawRectFilled(0, 155, 612, 770, { 0x32, 0x32, 0x32, 0xff });
 
-    yOff = 128;
-    yOff = DrawHeader(992, yOff, 896, 0xf2db, "DRH Info");
-    yOff = DrawList(992, yOff, 896, mDRHList);
+    int menuYOff = 233;
+    menuYOff = DrawVerticalMenu(160, menuYOff, "DRC Info", 0xf11b, selectedSection == DRC_INFO);
+    menuYOff = DrawVerticalMenu(160, menuYOff, "DRC Ext IDs", 0xf0cb, selectedSection == DRC_EXT);
+    menuYOff = DrawVerticalMenu(160, menuYOff, "DRH Info", 0xf2db, selectedSection == DRH_INFO);
 
-    DrawBottomBar(nullptr, "\ue044 Exit", "\ue001 Back");
+    int contentYOff = 255;
+    switch (selectedSection) {
+        case DRC_INFO:
+            contentYOff = DrawList(705, contentYOff, 1076, mDRCList);
+            break;
+        case DRC_EXT:
+            contentYOff = DrawList(705, contentYOff, 1076, mExtIdList);
+            break;
+        case DRH_INFO:
+            contentYOff = DrawList(705, contentYOff, 1076, mDRHList);
+            break;
+        default:
+            break;
+    }
+
+    DrawBottomBar("\ue07d Navigate", "\ue044 Exit", "\ue001 Back");
 }
 
 bool DRXInfoScreen::Update(VPADStatus& input)
 {
     if (input.trigger & VPAD_BUTTON_B) {
         return false;
+    }
+
+    if (input.trigger & VPAD_BUTTON_DOWN) {
+        if (selectedSection < SECTION_COUNT - 1) {
+            selectedSection = static_cast<MenuSection>(selectedSection + 1);
+        }
+    } else if (input.trigger & VPAD_BUTTON_UP) {
+        if (selectedSection > 0) {
+            selectedSection = static_cast<MenuSection>(selectedSection - 1);
+        }
     }
 
     return true;
