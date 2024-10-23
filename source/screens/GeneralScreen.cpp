@@ -144,7 +144,7 @@ void GeneralScreen::Draw()
     // Left sidebar
     Gfx::DrawRectFilled(0, 155, 612, 770, { 0x32, 0x32, 0x32, 0xff });
 
-     int menuYOff = 233;
+    int menuYOff = 233;
     menuYOff = DrawVerticalMenu(160, menuYOff, "Identification", 0xf02a, selectedSection == IDENTIFICATION);
     menuYOff = DrawVerticalMenu(160, menuYOff, "Hardware", 0xf538, selectedSection == HARDWARE);
     menuYOff = DrawVerticalMenu(160, menuYOff, "Region", 0xf0ac, selectedSection == REGION);
