@@ -4,28 +4,45 @@
 void Screen::DrawTopBar(const char* name)
 {
     // draw top bar
-    Gfx::DrawRectFilled(0, 0, Gfx::SCREEN_WIDTH, 75, Gfx::COLOR_BARS);
+    Gfx::DrawRectFilled(0, 0, Gfx::SCREEN_WIDTH, 127, Gfx::COLOR_BARS);
 
     // draw top bar content
-    Gfx::DrawIcon(32, 75 / 2, 60, Gfx::COLOR_TEXT, 0xf002, Gfx::ALIGN_VERTICAL);
-    Gfx::Print(128, 75 / 2, 60, Gfx::COLOR_TEXT, "WiiUIdent", Gfx::ALIGN_VERTICAL);
-    Gfx::Print(Gfx::GetTextWidth(60, "WiiUIdent") + 128 + 16, 75 / 2 + 5, 50, Gfx::COLOR_ALT_TEXT, "v" APP_VERSION, Gfx::ALIGN_VERTICAL);
+    Gfx::DrawIcon(139, 74, 48, Gfx::COLOR_WHITE, 0xf002, Gfx::ALIGN_CENTER);
+    Gfx::Print(187 + 8, 74, 48, Gfx::COLOR_WHITE, "WiiUIdent", Gfx::ALIGN_VERTICAL);
+    Gfx::Print(Gfx::GetTextWidth(60, "WiiUIdent") + 139 + 16, 77, 40, Gfx::COLOR_ALT_TEXT, "v" APP_VERSION, Gfx::ALIGN_VERTICAL);
     if (name)
-        Gfx::Print(Gfx::SCREEN_WIDTH - 32, 75 / 2, 50, Gfx::COLOR_ALT_TEXT, name, Gfx::ALIGN_VERTICAL | Gfx::ALIGN_RIGHT);
+        Gfx::Print(Gfx::SCREEN_WIDTH - 139, 74, 48, Gfx::COLOR_ALT_TEXT, name, Gfx::ALIGN_VERTICAL | Gfx::ALIGN_RIGHT);
+    
+    // draw topbar shadow
+    Gfx::DrawRectFilled(0, 127, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x69 }); 
+    Gfx::DrawRectFilled(0, 128, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x65 }); 
+    Gfx::DrawRectFilled(0, 129, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x5E }); 
+    Gfx::DrawRectFilled(0, 130, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x55 }); 
+    Gfx::DrawRectFilled(0, 131, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x4E }); 
+    Gfx::DrawRectFilled(0, 132, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x47 }); 
+    Gfx::DrawRectFilled(0, 133, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x3B }); 
+    Gfx::DrawRectFilled(0, 134, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x33 }); 
+    Gfx::DrawRectFilled(0, 135, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x2B }); 
+    Gfx::DrawRectFilled(0, 136, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x23 }); 
+    Gfx::DrawRectFilled(0, 137, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x1B }); 
+    Gfx::DrawRectFilled(0, 138, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x11 }); 
+    Gfx::DrawRectFilled(0, 139, Gfx::SCREEN_WIDTH, 1, { 0x00, 0x00, 0x00, 0x0C });
+
 }
 
 void Screen::DrawBottomBar(const char* leftHint, const char* centerHint, const char* rightHint)
 {
-    // draw bottom bar
-    Gfx::DrawRectFilled(0, Gfx::SCREEN_HEIGHT - 75, Gfx::SCREEN_WIDTH, 75, Gfx::COLOR_BARS);
+    // draw bottom separator
+    Gfx::DrawRectFilled(139, Gfx::SCREEN_HEIGHT - 102, Gfx::SCREEN_WIDTH - 278, 3, {0xd4, 0xd4, 0xd4, 0xff});
+    Gfx::DrawRectFilled(140, Gfx::SCREEN_HEIGHT - 101, Gfx::SCREEN_WIDTH - 280, 1, {0xf6, 0xf6, 0xf6, 0xff});
 
     // draw bottom bar content
     if (leftHint)
-        Gfx::Print(32, Gfx::SCREEN_HEIGHT - 75 / 2, 50, Gfx::COLOR_TEXT, leftHint, Gfx::ALIGN_VERTICAL);
+        Gfx::Print(139, Gfx::SCREEN_HEIGHT - 100 / 2, 36, Gfx::COLOR_TEXT, leftHint, Gfx::ALIGN_VERTICAL);
     if (centerHint)
-        Gfx::Print(Gfx::SCREEN_WIDTH / 2, Gfx::SCREEN_HEIGHT - 75 / 2, 50, Gfx::COLOR_TEXT, centerHint, Gfx::ALIGN_CENTER);
+        Gfx::Print(Gfx::SCREEN_WIDTH / 2, Gfx::SCREEN_HEIGHT - 100 / 2, 36, Gfx::COLOR_TEXT, centerHint, Gfx::ALIGN_CENTER);
     if (rightHint)
-        Gfx::Print(Gfx::SCREEN_WIDTH - 32,  Gfx::SCREEN_HEIGHT - 78 / 2, 50, Gfx::COLOR_TEXT, rightHint, Gfx::ALIGN_VERTICAL | Gfx::ALIGN_RIGHT);
+        Gfx::Print(Gfx::SCREEN_WIDTH - 139, Gfx::SCREEN_HEIGHT - 100 / 2, 36, Gfx::COLOR_TEXT, rightHint, Gfx::ALIGN_VERTICAL | Gfx::ALIGN_RIGHT);
 }
 
 int Screen::DrawHeader(int x, int y, int w, uint16_t icon, const char* text)
