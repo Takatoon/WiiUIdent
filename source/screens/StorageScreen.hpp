@@ -15,4 +15,12 @@ public:
 private:
     ScreenList mlcList;
     ScreenList sdList;
+
+    enum MenuSection {
+        MLC,
+        SD,
+        SECTION_COUNT
+    };
+
+    MenuSection selectedSection;
 };

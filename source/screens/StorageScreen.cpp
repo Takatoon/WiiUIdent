@@ -1,9 +1,10 @@
 #include "StorageScreen.hpp"
+#include "Gfx.hpp"
 #include "system/MemoryDevice.hpp"
 #include "Utils.hpp"
 #include <functional>
 
-StorageScreen::StorageScreen()
+StorageScreen::StorageScreen() : selectedSection(MLC)
 {
     for (const MemoryDevice& dev : MemoryDevice::GetDevices()) {
         ScreenList* list = nullptr;
@@ -43,21 +44,42 @@ void StorageScreen::Draw()
 {
     DrawTopBar("Storage Information");
 
-    int yOff = 128;
-    yOff = DrawHeader(32, yOff, 896, 0xf2db, "MLC");
-    yOff = DrawList(32, yOff, 896, mlcList);
+    // Left sidebar
+    Gfx::DrawRectFilled(0, 155, 612, 770, { 0x32, 0x32, 0x32, 0xff });
 
-    yOff = 128;
-    yOff = DrawHeader(992, yOff, 896, 0xf7c2, "SD Card");
-    yOff = DrawList(992, yOff, 896, sdList);
+    int menuYOff = 233;
+    menuYOff = DrawVerticalMenu(160, menuYOff, "MLC", 0xf2db, selectedSection == MLC);
+    menuYOff = DrawVerticalMenu(160, menuYOff, "SD", 0xf7c2, selectedSection == SD);
 
-    DrawBottomBar(nullptr, "\ue044 Exit", "\ue001 Back");
+    int contentYOff = 255;
+    switch (selectedSection) {
+        case MLC:
+            contentYOff = DrawList(705, contentYOff, 1076, mlcList);
+            break;
+        case SD:
+            contentYOff = DrawList(705, contentYOff, 1076, sdList);
+            break;
+        default:
+            break;
+    }
+
+    DrawBottomBar("\ue07d Navigate", "\ue044 Exit", "\ue001 Back");
 }
 
 bool StorageScreen::Update(VPADStatus& input)
 {
     if (input.trigger & VPAD_BUTTON_B) {
         return false;
+    }
+
+    if (input.trigger & VPAD_BUTTON_DOWN) {
+        if (selectedSection < SECTION_COUNT - 1) {
+            selectedSection = static_cast<MenuSection>(selectedSection + 1);
+        }
+    } else if (input.trigger & VPAD_BUTTON_UP) {
+        if (selectedSection > 0) {
+            selectedSection = static_cast<MenuSection>(selectedSection - 1);
+        }
     }
 
     return true;
