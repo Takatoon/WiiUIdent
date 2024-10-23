@@ -60,7 +60,7 @@ const char* const regionLookup[] = {
 
 }
 
-GeneralScreen::GeneralScreen()
+GeneralScreen::GeneralScreen() : selectedSection(IDENTIFICATION)
 {
     const auto& otp = OTP::Get();
     const auto& seeprom = SEEPROM::Get();
@@ -141,27 +141,50 @@ void GeneralScreen::Draw()
 {
     DrawTopBar("General System Information");
 
-    int yOff = 128;
-    yOff = DrawHeader(32, yOff, 896, 0xf02a, "Identification");
-    yOff = DrawList(32, yOff, 896, sysIdentList);
+    // Left sidebar
+    Gfx::DrawRectFilled(0, 155, 612, 770, { 0x32, 0x32, 0x32, 0xff });
 
-    yOff = DrawHeader(32, yOff, 896, 0xf538, "Hardware");
-    yOff = DrawList(32, yOff, 896, hardwareList);
+     int menuYOff = 233;
+    menuYOff = DrawVerticalMenu(160, menuYOff, "Identification", 0xf02a, selectedSection == IDENTIFICATION);
+    menuYOff = DrawVerticalMenu(160, menuYOff, "Hardware", 0xf538, selectedSection == HARDWARE);
+    menuYOff = DrawVerticalMenu(160, menuYOff, "Region", 0xf0ac, selectedSection == REGION);
+    menuYOff = DrawVerticalMenu(160, menuYOff, "Versions", 0xf886, selectedSection == VERSIONS);
 
-    yOff = 128;
-    yOff = DrawHeader(992, yOff, 896, 0xf0ac, "Region");
-    yOff = DrawList(992, yOff, 896, regionList);
+    int contentYOff = 255;
+    switch (selectedSection) {
+        case IDENTIFICATION:
+            contentYOff = DrawList(705, contentYOff, 1076, sysIdentList);
+            break;
+        case HARDWARE:
+            contentYOff = DrawList(705, contentYOff, 1076, hardwareList);
+            break;
+        case REGION:
+            contentYOff = DrawList(705, contentYOff, 1076, regionList);
+            break;
+        case VERSIONS:
+            contentYOff = DrawList(705, contentYOff, 1076, versionList);
+            break;
+        default:
+            break;
+    }
 
-    yOff = DrawHeader(992, yOff, 896, 0xf886, "Versions");
-    yOff = DrawList(992, yOff, 896, versionList);
-
-    DrawBottomBar(nullptr, "\ue044 Exit", "\ue001 Back");
+    DrawBottomBar("\ue07d Navigate", "\ue044 Exit", "\ue001 Back");
 }
 
 bool GeneralScreen::Update(VPADStatus& input)
 {
     if (input.trigger & VPAD_BUTTON_B) {
         return false;
+    }
+
+    if (input.trigger & VPAD_BUTTON_DOWN) {
+        if (selectedSection < SECTION_COUNT - 1) {
+            selectedSection = static_cast<MenuSection>(selectedSection + 1);
+        }
+    } else if (input.trigger & VPAD_BUTTON_UP) {
+        if (selectedSection > 0) {
+            selectedSection = static_cast<MenuSection>(selectedSection - 1);
+        }
     }
 
     return true;

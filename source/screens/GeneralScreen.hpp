@@ -17,4 +17,14 @@ private:
     ScreenList hardwareList;
     ScreenList regionList;
     ScreenList versionList;
+
+    enum MenuSection {
+        IDENTIFICATION,
+        HARDWARE,
+        REGION,
+        VERSIONS,
+        SECTION_COUNT
+    };
+
+    MenuSection selectedSection; 
 };
