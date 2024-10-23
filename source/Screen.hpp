@@ -36,5 +36,7 @@ protected:
 
     int DrawList(int x, int y, int w, ScreenList items);
 
+    int DrawVerticalMenu(int x, int y, const char* text, int icon, bool selected); 
+
 private:
 };

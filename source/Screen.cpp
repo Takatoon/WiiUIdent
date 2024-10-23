@@ -52,3 +52,20 @@ int Screen::DrawList(int x, int y, int w, ScreenList items)
 
     return yOff + 32;
 }
+
+int Screen::DrawVerticalMenu(int x, int y, const char* text, int icon, bool selected)
+{
+    SDL_Color color = selected ? Gfx::COLOR_TEXT : Gfx::COLOR_ALT_TEXT;
+    
+    if (selected) {
+        Gfx::DrawRectFilled(x - 30 , y, 10, 70, Gfx::COLOR_BARS);
+    } 
+
+    const int iconWidth = Gfx::GetIconWidth(52, icon) + 10;
+
+    Gfx::DrawIcon(x, y + 10, 50, color, icon, Gfx::ALIGN_LEFT);
+
+    Gfx::Print(x + iconWidth, y, 52, color, text, Gfx::ALIGN_LEFT);
+
+    return y + 100; 
+}
