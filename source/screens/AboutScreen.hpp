@@ -16,4 +16,13 @@ private:
     ScreenList creditList;
     ScreenList fontList;
     ScreenList linkList;
+
+    enum MenuSection {
+        CREDITS,
+        FONTS,
+        LINKS,
+        SECTION_COUNT
+    };
+
+    MenuSection selectedSection;
 };

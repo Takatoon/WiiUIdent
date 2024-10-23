@@ -1,6 +1,7 @@
 #include "AboutScreen.hpp"
+#include "Gfx.hpp"
 
-AboutScreen::AboutScreen()
+AboutScreen::AboutScreen() : selectedSection(CREDITS)
 {
     creditList.push_back({"Developers:", "GaryOderNichts"});
     creditList.push_back({"",            "GerbilSoft"});
@@ -22,23 +23,48 @@ void AboutScreen::Draw()
 {
     DrawTopBar("About");
 
-    int yOff = 128;
-    yOff = DrawHeader(32, yOff, 896, 0xf121, "Credits");
-    yOff = DrawList(32, yOff, 896, creditList);
-    yOff = DrawHeader(32, yOff, 896, 0xf031, "Fonts");
-    yOff = DrawList(32, yOff, 896, fontList);
+    // Left sidebar
+    Gfx::DrawRectFilled(0, 155, 612, 770, { 0x32, 0x32, 0x32, 0xff });
 
-    yOff = 128;
-    yOff = DrawHeader(992, yOff, 896, 0xf08e, "Links");
-    yOff = DrawList(992, yOff, 896, linkList);
+    // Draw vertical menu
+    int menuYOff = 233;
+    menuYOff = DrawVerticalMenu(160, menuYOff, "Credits", 0xf121, selectedSection == CREDITS);
+    menuYOff = DrawVerticalMenu(160, menuYOff, "Fonts", 0xf031, selectedSection == FONTS);
+    menuYOff = DrawVerticalMenu(160, menuYOff, "Links", 0xf08e, selectedSection == LINKS);
 
-    DrawBottomBar(nullptr, "\ue044 Exit", "\ue001 Back");
+    // Draw the selected content 
+    int contentYOff = 265;
+    switch (selectedSection) {
+        case CREDITS:
+            contentYOff = DrawList(705, contentYOff, 1076, creditList);
+            break;
+        case FONTS:
+            contentYOff = DrawList(705, contentYOff, 1076, fontList);
+            break;
+        case LINKS:
+            contentYOff = DrawList(705, contentYOff, 1076, linkList);
+            break;
+        default:
+            break;
+    }
+
+    DrawBottomBar("\ue07d Navigate", "\ue044 Exit", "\ue001 Back");
 }
 
 bool AboutScreen::Update(VPADStatus& input)
 {
     if (input.trigger & VPAD_BUTTON_B) {
         return false;
+    }
+
+    if (input.trigger & VPAD_BUTTON_DOWN) {
+        if (selectedSection < SECTION_COUNT - 1) {
+            selectedSection = static_cast<MenuSection>(selectedSection + 1);
+        }
+    } else if (input.trigger & VPAD_BUTTON_UP) {
+        if (selectedSection > 0) {
+            selectedSection = static_cast<MenuSection>(selectedSection - 1);
+        }
     }
 
     return true;
