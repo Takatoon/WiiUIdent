@@ -94,6 +94,8 @@ bool Init()
         return false;
     }
 
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
     if (!OSGetSharedData(OS_SHAREDDATATYPE_FONT_STANDARD, 0, &fontData, &fontSize)) {
         OSReport("OSGetSharedData failed\n");
         return false;
