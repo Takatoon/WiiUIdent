@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Screen.hpp"
+#include <map>
 
 class SubmitScreen : public Screen
 {
@@ -26,4 +27,19 @@ private:
 
     std::string error;
     std::string response;
+
+    enum MenuID {
+        MENU_ID_VIEW_DATA,
+        MENU_ID_SEND_DATA,
+        MENU_ID_MIN = MENU_ID_VIEW_DATA,
+        MENU_ID_MAX = MENU_ID_SEND_DATA,
+    };
+
+    struct MenuEntry {
+        uint16_t icon;
+        const char* name;
+    };
+
+    std::map<MenuID, MenuEntry> entries;
+    MenuID selected = MENU_ID_MIN;
 };

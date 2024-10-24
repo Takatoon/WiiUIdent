@@ -78,8 +78,9 @@ const char desc[] =
     "This will submit statistical data to the developers of WiiUIdent,\n"
     "which will help to determine various statistics about Wii U consoles,\n"
     "e.g. eMMC manufacturers. The submitted data may be publicly accessible\n"
-    "but personally identifying information will be kept confidential.\n"
-    "\n"
+    "but personally identifying information will be kept confidential.\n";
+
+const char infoDetails[] =
     "Information that will be submitted:\n"
     "\uff65 System model and serial number (excluding the last 3 digits)\n"
     "\uff65 Manufacturing date\n"
@@ -93,7 +94,11 @@ const char desc[] =
     "Do you want to submit your console's system data?\n";
 }
 
-SubmitScreen::SubmitScreen()
+SubmitScreen::SubmitScreen() 
+    : entries({
+        { MENU_ID_VIEW_DATA, { 0xf05a, "VIEW DATA DETAILS" }},
+        { MENU_ID_SEND_DATA, { 0xf0ee, "SUBMIT DATA" }}
+    })
 {
 }
 
@@ -106,34 +111,64 @@ void SubmitScreen::Draw()
     DrawTopBar("Submit System Information");
 
     if (state == STATE_INFO) {
-        Gfx::Print(32, 75 + 32, 40, Gfx::COLOR_TEXT, desc);
+        Gfx::DrawIcon(Gfx::SCREEN_WIDTH / 2 , 285 , 128, Gfx::COLOR_ALT_TEXT, 0xf0ee, Gfx::ALIGN_CENTER | Gfx::ALIGN_VERTICAL);
+        Gfx::Print(Gfx::SCREEN_WIDTH / 2, 540, 40, Gfx::COLOR_ALT_TEXT, desc, Gfx::ALIGN_CENTER);
 
-        DrawBottomBar(nullptr, "\ue044 Exit", "\ue001 Back / \ue000 Submit");
+        for (MenuID id = MENU_ID_MIN; id <= MENU_ID_MAX; id = static_cast<MenuID>(id + 1)) {
+            bool isSelected = (id == selected); 
+            SDL_Color colorBorder;
+            SDL_Color colorBck;
+            if (isSelected) {
+                colorBorder = Gfx::COLOR_BARS;
+                colorBck = Gfx::COLOR_ALT_BACKGROUND;
+            } else {
+                colorBorder = Gfx::COLOR_ALT_TEXT;
+                colorBck = Gfx::COLOR_BACKGROUND;
+            }
+
+            int xOff = 330 + static_cast<int>(id) * 740;
+
+            int btnWidth = 530;
+            int iconWidth = Gfx::GetIconWidth(40, entries[id].icon) + 10;
+            int btnTextWidth = Gfx::GetTextWidth(32, entries[id].name) + iconWidth;
+            int btnTextX = xOff + (btnWidth - btnTextWidth) / 2; 
+
+            Gfx::DrawRectFilled(xOff, 725, btnWidth, 120, colorBorder);
+            Gfx::DrawRectFilled(xOff + 9, 725 + 9, 530 - 18, 120 - 18, colorBck);
+
+            Gfx::DrawIcon(btnTextX, 774 + 10, 40, Gfx::COLOR_ALT_TEXT, entries[id].icon, Gfx::ALIGN_VERTICAL);
+            Gfx::Print(btnTextX + iconWidth, 774 + 10, 32, Gfx::COLOR_ALT_TEXT, entries[id].name, Gfx::ALIGN_VERTICAL);
+        }
+
+        DrawBottomBar("\ue07e Navigate", "\ue044 Exit", "\ue001 Back / \ue000 Select");
     } else if (state == STATE_SUBMITTING) {
         Gfx::Print(Gfx::SCREEN_WIDTH / 2, Gfx::SCREEN_HEIGHT / 2, 64, Gfx::COLOR_TEXT, "Submitting info...", Gfx::ALIGN_CENTER);
 
         DrawBottomBar("Please wait...", nullptr, nullptr);
     } else if (state == STATE_SUBMITTED) {
         if (!error.empty() && response.empty()) {
-            Gfx::Print(Gfx::SCREEN_WIDTH / 2, Gfx::SCREEN_HEIGHT / 2, 40, Gfx::COLOR_ERROR, Utils::sprintf("Error!\n%s", error.c_str()), Gfx::ALIGN_CENTER);
+            Gfx::DrawIcon(Gfx::SCREEN_WIDTH / 2 , 285 , 128, Gfx::COLOR_ALT_TEXT, 0xf071, Gfx::ALIGN_CENTER | Gfx::ALIGN_VERTICAL);
+            Gfx::Print(Gfx::SCREEN_WIDTH / 2, 424, 40, Gfx::COLOR_ALT_TEXT, Utils::sprintf("Error!\n%s", error.c_str()), Gfx::ALIGN_CENTER);   
 
-            Gfx::Print(Gfx::SCREEN_WIDTH / 2, Gfx::SCREEN_HEIGHT - 75 - 32, 40, Gfx::COLOR_TEXT,
-                "Failed to submit system data. Please report a bug on GitHub:\n"
+            Gfx::Print(Gfx::SCREEN_WIDTH / 2, 700, 40, Gfx::COLOR_TEXT,
+                "Failed to submit system data.\nPlease report a bug on GitHub:\n"
                 "https://github.com/GaryOderNichts/WiiUIdent/issues", Gfx::ALIGN_HORIZONTAL | Gfx::ALIGN_BOTTOM);
         } else if (!response.empty()) {
-            Gfx::Print(Gfx::SCREEN_WIDTH / 2, Gfx::SCREEN_HEIGHT / 2, 40, Gfx::COLOR_TEXT, response, Gfx::ALIGN_CENTER);
+            Gfx::Print(Gfx::SCREEN_WIDTH / 2, 424, 40, Gfx::COLOR_TEXT, response, Gfx::ALIGN_CENTER);
 
             if (!error.empty()) {
-                Gfx::Print(Gfx::SCREEN_WIDTH / 2, Gfx::SCREEN_HEIGHT - 75 - 32, 40, Gfx::COLOR_TEXT,
-                    "Failed to submit system data. Please report a bug on GitHub:\n"
+                Gfx::DrawIcon(Gfx::SCREEN_WIDTH / 2 , 285 , 128, Gfx::COLOR_ALT_TEXT, 0xf071, Gfx::ALIGN_CENTER | Gfx::ALIGN_VERTICAL);
+                Gfx::Print(Gfx::SCREEN_WIDTH / 2, 700, 40, Gfx::COLOR_TEXT,
+                    "Failed to submit system data.\nPlease report a bug on GitHub:\n"
                     "https://github.com/GaryOderNichts/WiiUIdent/issues", Gfx::ALIGN_HORIZONTAL | Gfx::ALIGN_BOTTOM);
             } else {
-                Gfx::Print(Gfx::SCREEN_WIDTH / 2, Gfx::SCREEN_HEIGHT - 75 - 32, 40, Gfx::COLOR_TEXT,
-                    "System data submitted successfully. Check out the Wii U console database at:\n"
-                    "https://" DATABASE_URL "/", Gfx::ALIGN_HORIZONTAL | Gfx::ALIGN_BOTTOM);  
+                Gfx::DrawIcon(Gfx::SCREEN_WIDTH / 2 , 285 , 128, Gfx::COLOR_ALT_TEXT, 0xf058, Gfx::ALIGN_CENTER | Gfx::ALIGN_VERTICAL);
+                Gfx::Print(Gfx::SCREEN_WIDTH / 2, 700, 40, Gfx::COLOR_ALT_TEXT, "System data submitted successfully.\nCheck out the Wii U console database at:\n"
+                    "https://" DATABASE_URL "/", Gfx::ALIGN_CENTER);  
             }
         } else {
-            Gfx::Print(Gfx::SCREEN_WIDTH / 2, Gfx::SCREEN_HEIGHT / 2, 64, Gfx::COLOR_TEXT, "No response.", Gfx::ALIGN_CENTER);
+                        Gfx::DrawIcon(Gfx::SCREEN_WIDTH / 2 , 285 , 128, Gfx::COLOR_ALT_TEXT, 0xf071, Gfx::ALIGN_CENTER | Gfx::ALIGN_VERTICAL);
+            Gfx::Print(Gfx::SCREEN_WIDTH / 2, 424, 40, Gfx::COLOR_TEXT, "No response.", Gfx::ALIGN_CENTER);
         }
 
         DrawBottomBar(nullptr, "\ue044 Exit", "\ue001 Back");
@@ -144,9 +179,19 @@ bool SubmitScreen::Update(VPADStatus& input)
 {
     if (state == STATE_INFO) {
         if (input.trigger & VPAD_BUTTON_A) {
-            state = STATE_SUBMITTING;
+            if (selected == MENU_ID_SEND_DATA) {
+                state = STATE_SUBMITTING;
+            }
         } else if (input.trigger & VPAD_BUTTON_B) {
             return false;
+        } else if (input.trigger & VPAD_BUTTON_LEFT) {
+            if (selected > MENU_ID_MIN) {
+                selected = static_cast<MenuID>(selected - 1);
+            }
+        } else if (input.trigger & VPAD_BUTTON_RIGHT) {
+            if (selected < MENU_ID_MAX) {
+                selected = static_cast<MenuID>(selected + 1);
+            }
         }
     } else if (state == STATE_SUBMITTING) {
         SubmitSystemData();
