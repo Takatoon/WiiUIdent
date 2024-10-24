@@ -110,9 +110,7 @@ GeneralScreen::GeneralScreen() : selectedSection(IDENTIFICATION)
     if (productAreaId < 7) {
         regionList.push_back({"Product Area:", regionLookup[productAreaId]});
     }
-    regionList.push_back({"Game Region:", ""});
-    regionList.push_back({"",
-        Utils::sprintf("%s %s %s %s %s %s (%u)",
+    regionList.push_back({"Game Region:",  Utils::sprintf("%s %s %s %s %s %s (%u)",
             (sysProd.game_region & MCP_REGION_JAPAN)  ? regionLookup[0] : "---",
             (sysProd.game_region & MCP_REGION_USA)    ? regionLookup[1] : "---",
             (sysProd.game_region & MCP_REGION_EUROPE) ? regionLookup[2] : "---",
