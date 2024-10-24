@@ -61,13 +61,20 @@ int Screen::DrawHeader(int x, int y, int w, uint16_t icon, const char* text)
 int Screen::DrawList(int x, int y, int w, ScreenList items)
 {
     int yOff = y;
-    for (const auto& item : items) {
-        Gfx::Print(x + 16, yOff, 40, Gfx::COLOR_TEXT, item.first, Gfx::ALIGN_VERTICAL);
-        Gfx::Print(x + w - 16, yOff, 40, Gfx::COLOR_TEXT, item.second.string, Gfx::ALIGN_VERTICAL | Gfx::ALIGN_RIGHT, item.second.monospace);
+    for (auto it = items.begin(); it != items.end(); ++it) {
+        const auto& item = *it;
+        Gfx::Print(x, yOff, 40, Gfx::COLOR_ALT_TEXT, item.first, Gfx::ALIGN_VERTICAL);
+        Gfx::Print(x + w, yOff, 40, Gfx::COLOR_ALT_TEXT, item.second.string, Gfx::ALIGN_VERTICAL | Gfx::ALIGN_RIGHT, item.second.monospace);
         yOff += std::max(Gfx::GetTextHeight(40, item.first), Gfx::GetTextHeight(40, item.second.string, item.second.monospace));
+        
+        auto nextIt = std::next(it);
+        if (nextIt != items.end() && !nextIt->first.empty()) {
+            Gfx::DrawRectFilled(x, yOff - 10, w, 2, { 0x03f, 0x03f, 0x03f, 0xff });
+        }
+        yOff += 40;
     }
 
-    return yOff + 32;
+    return yOff + 40;
 }
 
 int Screen::DrawVerticalMenu(int x, int y, const char* text, int icon, bool selected)
