@@ -10,8 +10,7 @@ AboutScreen::AboutScreen() : selectedSection(CREDITS)
     fontList.push_back({"Icon Font:", "FontAwesome"});
     fontList.push_back({"Monospace Font:", "Terminus Font"});
 
-    linkList.push_back({"GitHub:", ""});
-    linkList.push_back({"", {"github.com/GaryOderNichts/WiiUIdent", true}});
+    linkList.push_back({"GitHub:", {"github.com/GaryOderNichts/WiiUIdent", true}});
     linkList.push_back({"System Database:", {DATABASE_URL, true}});
 }
 
