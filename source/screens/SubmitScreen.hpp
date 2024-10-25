@@ -1,7 +1,10 @@
 #pragma once
 
 #include "Screen.hpp"
+#include "Utils.hpp"
 #include <map>
+
+class MessageBox;
 
 class SubmitScreen : public Screen
 {
@@ -42,4 +45,6 @@ private:
 
     std::map<MenuID, MenuEntry> entries;
     MenuID selected = MENU_ID_MIN;
+
+    std::unique_ptr<MessageBox> mMessageBox;
 };

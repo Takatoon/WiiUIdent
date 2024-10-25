@@ -13,6 +13,8 @@
 
 #include <mocha/mocha.h>
 
+#include "MessageBox.hpp"
+
 struct IOSCEccSignedCert {
     uint32_t signature_type;    // [0x000] 0x00010002 or 0x00010005
     uint8_t signature[0x3C];    // [0x004] ECC signature
@@ -98,7 +100,8 @@ SubmitScreen::SubmitScreen()
     : entries({
         { MENU_ID_VIEW_DATA, { 0xf05a, "VIEW DATA DETAILS" }},
         { MENU_ID_SEND_DATA, { 0xf0ee, "SUBMIT DATA" }}
-    })
+    }),
+    mMessageBox()
 {
 }
 
@@ -141,6 +144,10 @@ void SubmitScreen::Draw()
         }
 
         DrawBottomBar("\ue07e Navigate", "\ue044 Exit", "\ue001 Back / \ue000 Select");
+
+        if (mMessageBox) {
+            mMessageBox->Draw();
+        }
     } else if (state == STATE_SUBMITTING) {
         Gfx::Print(Gfx::SCREEN_WIDTH / 2, Gfx::SCREEN_HEIGHT / 2, 64, Gfx::COLOR_TEXT, "Submitting info...", Gfx::ALIGN_CENTER);
 
@@ -178,9 +185,30 @@ void SubmitScreen::Draw()
 bool SubmitScreen::Update(VPADStatus& input)
 {
     if (state == STATE_INFO) {
+
+        if (mMessageBox) {
+            if (!mMessageBox->Update(input)) {
+                mMessageBox.reset();
+            }
+
+            return true;
+        }
+
         if (input.trigger & VPAD_BUTTON_A) {
             if (selected == MENU_ID_SEND_DATA) {
                 state = STATE_SUBMITTING;
+            }
+            if (selected == MENU_ID_VIEW_DATA) {
+                mMessageBox = std::make_unique<MessageBox>(
+                    "You have unsaved changes!",
+                    infoDetails,
+                    std::vector{
+                        MessageBox::Option{0, "\ue001 Back", [this]() {} },
+                        MessageBox::Option{0xf00d, "SUBMIT DATA", [this]() {
+                            state = STATE_SUBMITTING;
+                        }},
+                    }
+                );
             }
         } else if (input.trigger & VPAD_BUTTON_B) {
             return false;
