@@ -37,17 +37,51 @@ void MenuScreen::Draw()
 
     // draw entries
     for (MenuID id = MENU_ID_MIN; id <= MENU_ID_MAX; id = static_cast<MenuID>(id + 1)) {
-        int yOff = 75 + static_cast<int>(id) * 150;
-        Gfx::DrawRectFilled(0, yOff, Gfx::SCREEN_WIDTH, 150, Gfx::COLOR_ALT_BACKGROUND);
-        Gfx::DrawIcon(68, yOff + 150 / 2, 60, Gfx::COLOR_TEXT, entries[id].icon);
-        Gfx::Print(128 + 8, yOff + 150 / 2, 60, Gfx::COLOR_TEXT, entries[id].name, Gfx::ALIGN_VERTICAL);
 
-        if (id == selected) {
-            Gfx::DrawRect(0, yOff, Gfx::SCREEN_WIDTH, 150, 8, Gfx::COLOR_HIGHLIGHTED);
+        if (id < MENU_ID_MAX) {
+            // int yOff = 75 + static_cast<int>(id) * 150;
+            uint32_t xOff = 332 + static_cast<int>(id) * 322;
+
+            if (id == selected) {
+                Gfx::DrawRectFilled(xOff - 20, 270 - 20, 284 + 40, 284 + 40, Gfx::COLOR_BARS);
+                Gfx::DrawRectFilled(xOff - 11, 270 - 11, 284 + 22, 284 + 22, Gfx::COLOR_ALT_ACCENT);
+                if (xOff + Gfx::GetTextWidth(48,entries[id].name) > Gfx::SCREEN_WIDTH) {
+                    Gfx::Print(xOff + 284 + 20, 610, 48, Gfx::COLOR_TEXT, entries[id].name, Gfx::ALIGN_VERTICAL | Gfx::ALIGN_RIGHT);
+                } else { 
+                    Gfx::Print(xOff - 20, 610, 48, Gfx::COLOR_TEXT, entries[id].name, Gfx::ALIGN_VERTICAL);
+                }
+                Gfx::DrawIcon(xOff + 284 / 2, 270 + 284 / 2, 162, Gfx::COLOR_WHITE, entries[id].icon);
+            } else {
+                Gfx::DrawRectFilled(xOff - 8, 270 - 8, 284 + 16, 284 + 16, {0x00, 0x00, 0x00, 0x24 });
+                Gfx::DrawRectFilled(xOff - 7, 270 - 7, 284 + 14, 284 + 14, {0x00, 0x00, 0x00, 0x69 });
+                Gfx::DrawRectFilled(xOff - 6, 270 - 6, 284 + 12, 284 + 12, { 0x37, 0x37, 0x37, 0xff });
+                Gfx::DrawRectFilled(xOff, 270, 284, 284, { 0x30, 0x30, 0x30, 0xff });
+                Gfx::DrawIcon(xOff + 284 / 2, 270 + 284 / 2, 128, Gfx::COLOR_TEXT, entries[id].icon);
+            }
+
+        } else {
+    
+            if (id == selected) {
+                Gfx::DrawRectFilled(900 - 15, 735 - 15, 120 + 30, 120 + 30, Gfx::COLOR_BARS);
+                Gfx::DrawRectFilled(900 - 6, 735 - 6, 120 + 12, 120 + 12, Gfx::COLOR_ALT_ACCENT);
+                Gfx::Print(900 + 120 / 2, 735 + 120 + 56, 48, Gfx::COLOR_TEXT, entries[id].name, Gfx::ALIGN_VERTICAL | Gfx::ALIGN_CENTER);
+                Gfx::DrawIcon(900 + 60 , 735 + 60 , 64, Gfx::COLOR_WHITE, entries[id].icon);
+
+            
+            } else {
+                Gfx::DrawRectFilled(900 - 8, 735 - 8, 120 + 16, 120 + 16, {0x00, 0x00, 0x00, 0x24 });
+                Gfx::DrawRectFilled(900 - 7, 735 - 7, 120 + 14, 120 + 14, {0x00, 0x00, 0x00, 0x69 });
+                Gfx::DrawRectFilled(900 - 6, 735 - 6, 120 + 12, 120 + 12, { 0x37, 0x37, 0x37, 0xff });
+                Gfx::DrawRectFilled(900, 735, 120, 120, { 0x30, 0x30, 0x30, 0xff });
+                Gfx::DrawIcon(900 + 60 , 735 + 60 , 48, Gfx::COLOR_TEXT, entries[id].icon);
+            }
         }
+
     }
 
     DrawBottomBar("\ue07d Navigate", "\ue044 Exit", "\ue000 Select");
+    Gfx::Print(139, Gfx::SCREEN_HEIGHT - 100 / 2, 36, Gfx::COLOR_TEXT, "\ue07e", Gfx::ALIGN_VERTICAL); // A little hacky, but it works
+
 }
 
 bool MenuScreen::Update(VPADStatus& input)
@@ -60,14 +94,19 @@ bool MenuScreen::Update(VPADStatus& input)
         return true;
     }
 
-    if (input.trigger & VPAD_BUTTON_DOWN) {
-        if (selected < MENU_ID_MAX) {
+    if (input.trigger & VPAD_BUTTON_RIGHT) {
+        if (selected < MENU_ID_MAX - 1) {
             selected = static_cast<MenuID>(selected + 1);
         }
-    } else if (input.trigger & VPAD_BUTTON_UP) {
-        if (selected > MENU_ID_MIN) {
+    } else if (input.trigger & VPAD_BUTTON_LEFT) {
+        if (selected > MENU_ID_MIN && selected < MENU_ID_ABOUT) {
             selected = static_cast<MenuID>(selected - 1);
         }
+    } else if (input.trigger & VPAD_BUTTON_DOWN) {
+        gSelected = selected;
+        selected = MENU_ID_ABOUT;
+    } else if (input.trigger & VPAD_BUTTON_UP) {
+        selected = gSelected;
     }
 
     if (input.trigger & VPAD_BUTTON_A) {

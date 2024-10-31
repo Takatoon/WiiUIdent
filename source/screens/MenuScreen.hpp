@@ -34,4 +34,5 @@ private:
     };
     std::map<MenuID, MenuEntry> entries;
     MenuID selected = MENU_ID_MIN;
+    MenuID gSelected = MENU_ID_MIN;
 };
