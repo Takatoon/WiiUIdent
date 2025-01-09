@@ -39,8 +39,8 @@ void MessageBox::Draw()
     Gfx::DrawRectFilled(128, 128, Gfx::SCREEN_WIDTH - 256, Gfx::SCREEN_HEIGHT - 256, Gfx::COLOR_ALT_BACKGROUND);
 
     // Print message
-    Gfx::Print(Gfx::SCREEN_WIDTH / 2, 128 + 64, 80, Gfx::COLOR_TEXT, mTitle, Gfx::ALIGN_HORIZONTAL | Gfx::ALIGN_TOP);
-    Gfx::Print(Gfx::SCREEN_WIDTH / 2, 128 + 64 + Gfx::GetTextHeight(80, mTitle) + 8, 40, Gfx::COLOR_TEXT, mMessage, Gfx::ALIGN_HORIZONTAL | Gfx::ALIGN_TOP);
+    Gfx::Print(Gfx::SCREEN_WIDTH / 2, 128 + 64, 64, Gfx::COLOR_TEXT, mTitle, Gfx::ALIGN_HORIZONTAL | Gfx::ALIGN_TOP);
+    Gfx::Print(Gfx::SCREEN_WIDTH / 2 - ( Gfx::GetTextWidth(40, mMessage) / 2) , 128 + 64 + Gfx::GetTextHeight(64, mTitle) + 8, 40, Gfx::COLOR_TEXT, mMessage);
 
     uint32_t xSize = Gfx::SCREEN_WIDTH - 256;
     xSize /= mOptions.size();
@@ -62,17 +62,15 @@ void MessageBox::Draw()
         
         uint32_t iconWidth = 0;
         if (mOptions[i].icon) {
-            iconWidth = Gfx::GetIconWidth(64, mOptions[i].icon);
+            iconWidth = Gfx::GetIconWidth(40, mOptions[i].icon);
         }
 
-        uint32_t textStart = xOff + (xSize - iconWidth - Gfx::GetTextWidth(64, mOptions[i].text)) / 2;
+        uint32_t textStart = xOff + (xSize - iconWidth - Gfx::GetTextWidth(40, mOptions[i].text)) / 2;
 
         if (iconWidth) {
-            Gfx::DrawIcon(textStart, Gfx::SCREEN_HEIGHT - 192, 64, Gfx::COLOR_TEXT, mOptions[i].icon);
+            Gfx::DrawIcon(textStart, Gfx::SCREEN_HEIGHT - 192, 40, Gfx::COLOR_TEXT, mOptions[i].icon);
         }
-        Gfx::Print(textStart + iconWidth, Gfx::SCREEN_HEIGHT - 192, 64, Gfx::COLOR_TEXT, mOptions[i].text, Gfx::ALIGN_VERTICAL | Gfx::ALIGN_LEFT);
-
-        
+        Gfx::Print(textStart + iconWidth, Gfx::SCREEN_HEIGHT - 192, 40, Gfx::COLOR_TEXT, mOptions[i].text, Gfx::ALIGN_VERTICAL | Gfx::ALIGN_LEFT);
 
         xOff += xSize;
     }
