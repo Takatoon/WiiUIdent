@@ -39,7 +39,6 @@ void MenuScreen::Draw()
     for (MenuID id = MENU_ID_MIN; id <= MENU_ID_MAX; id = static_cast<MenuID>(id + 1)) {
 
         if (id < MENU_ID_MAX) {
-            // int yOff = 75 + static_cast<int>(id) * 150;
             uint32_t xOff = 332 + static_cast<int>(id) * 322;
 
             if (id == selected) {
