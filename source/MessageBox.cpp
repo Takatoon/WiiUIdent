@@ -53,11 +53,8 @@ void MessageBox::Draw()
         } 
 
         if (i == mSelected) {
-            Gfx::DrawRectFilled(xOff - 14, Gfx::SCREEN_HEIGHT - 256 - 14, xSize + 28 , 128 + 28,{ 0x00, 0x91, 0xea, 0x19 });
-            Gfx::DrawRectFilled(xOff - 12, Gfx::SCREEN_HEIGHT - 256 - 12, xSize + 24 , 128 + 24,{ 0x00, 0x91, 0xea, 0x26 });
-            Gfx::DrawRectFilled(xOff - 10, Gfx::SCREEN_HEIGHT - 256 - 10, xSize + 20 , 128 + 20,{ 0x00, 0x91, 0xea, 0x33 });
-            Gfx::DrawRectFilled(xOff - 8, Gfx::SCREEN_HEIGHT - 256 - 8, xSize + 16, 128 + 16, Gfx::COLOR_HIGHLIGHTED);
-            Gfx::DrawRectFilled(xOff, Gfx::SCREEN_HEIGHT - 256, xSize, 128, Gfx::COLOR_ALT_BACKGROUND);
+            Gfx::DrawRectFilled(xOff - 8, Gfx::SCREEN_HEIGHT - 256 - 8, xSize + 16, 128 + 16, Gfx::COLOR_BARS);
+            Gfx::DrawRectFilled(xOff, Gfx::SCREEN_HEIGHT - 256, xSize, 128, Gfx::COLOR_ALT_ACCENT);
         }
         
         uint32_t iconWidth = 0;
