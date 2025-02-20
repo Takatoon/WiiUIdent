@@ -20,8 +20,8 @@ private:
 
     enum MenuSection {
         DRC_INFO,
-        DRC_EXT,
         DRH_INFO,
+        DRC_EXT,
         SECTION_COUNT
     };
 

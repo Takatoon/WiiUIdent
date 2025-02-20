@@ -2,6 +2,7 @@
 #include "Gfx.hpp"
 #include "Utils.hpp"
 #include <span>
+#include <map>
 
 #include <nsysccr/cdc.h>
 #include <nsysccr/cfg.h>
@@ -59,6 +60,15 @@ const char* kBoardSubVersions[] = {
     "DKTVMP"
 };
 
+// from gamepad firmware @0x00020bc0
+const std::map<uint8_t, const char*> kChipVersions = {
+   { 0x10, "TS" },
+   { 0x20, "ES1" },
+   { 0x30, "ES2" },
+   { 0x40, "ES3" },
+   { 0x41, "MS01" },
+};
+
 // from gamepad firmare @0x000b29fc
 const char* kRegionStrings[] = {
     "JAPAN",
@@ -104,6 +114,15 @@ DRXInfoScreen::DRXInfoScreen() : selectedSection(DRC_INFO)
             region < 0x7 ? kRegionStrings[region] : "UNKNOWN", region)});
     } else {
         mDRCList.push_back({"GetRegion failed", ""});
+    }
+
+    CCRCDCSysInfo sysInfo;
+    if (CCRCDCSysGetInfo(CCR_CDC_DESTINATION_DRC0, &sysInfo) == 0) {
+        mDRCList.push_back({"Chip Version:", Utils::sprintf("%s (0x%02x)",
+            kChipVersions.contains(sysInfo.chipVersion) ? kChipVersions.at(sysInfo.chipVersion) : "UNKNOWN", sysInfo.chipVersion)});
+        mDRCList.push_back({"UMI Version:", {Utils::sprintf("0x%08x", sysInfo.umiVersion), true}});
+    } else {
+        mDRCList.push_back({"SysGetInfo failed", ""});
     }
 
     if (CCRCDCSoftwareGetVersion(CCR_CDC_DESTINATION_DRH, &softwareVersion) == 0) {
