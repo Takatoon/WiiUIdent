@@ -137,10 +137,10 @@ GeneralScreen::~GeneralScreen()
 
 void GeneralScreen::Draw()
 {
-    DrawTopBar("General System Information");
-
     // Left sidebar
-    Gfx::DrawRectFilled(0, 155, 612, 770, { 0x32, 0x32, 0x32, 0xff });
+    Gfx::DrawRectFilled(0, 127, 612, 851, { 0x32, 0x32, 0x32, 0xff });
+    
+    DrawTopBar("General System Information");
 
     int menuYOff = 233;
     menuYOff = DrawVerticalMenu(160, menuYOff, "Identification", 0xf02a, selectedSection == IDENTIFICATION);

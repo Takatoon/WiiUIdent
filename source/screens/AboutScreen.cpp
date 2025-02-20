@@ -20,10 +20,10 @@ AboutScreen::~AboutScreen()
 
 void AboutScreen::Draw()
 {
-    DrawTopBar("About");
-
     // Left sidebar
-    Gfx::DrawRectFilled(0, 155, 612, 770, { 0x32, 0x32, 0x32, 0xff });
+    Gfx::DrawRectFilled(0, 127, 612, 851, { 0x32, 0x32, 0x32, 0xff });
+        
+    DrawTopBar("About");
 
     // Draw vertical menu
     int menuYOff = 233;

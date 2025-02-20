@@ -42,10 +42,10 @@ StorageScreen::~StorageScreen()
 
 void StorageScreen::Draw()
 {
-    DrawTopBar("Storage Information");
-
     // Left sidebar
-    Gfx::DrawRectFilled(0, 155, 612, 770, { 0x32, 0x32, 0x32, 0xff });
+    Gfx::DrawRectFilled(0, 127, 612, 851, { 0x32, 0x32, 0x32, 0xff });
+    
+    DrawTopBar("Storage Information");
 
     int menuYOff = 233;
     menuYOff = DrawVerticalMenu(160, menuYOff, "MLC", 0xf2db, selectedSection == MLC);

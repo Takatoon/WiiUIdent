@@ -146,10 +146,10 @@ DRXInfoScreen::~DRXInfoScreen()
 
 void DRXInfoScreen::Draw()
 {
-    DrawTopBar("DRC/DRH Information");
-
     // Left sidebar
-    Gfx::DrawRectFilled(0, 155, 612, 770, { 0x32, 0x32, 0x32, 0xff });
+    Gfx::DrawRectFilled(0, 127, 612, 851, { 0x32, 0x32, 0x32, 0xff });
+    
+    DrawTopBar("DRC/DRH Information");
 
     int menuYOff = 233;
     menuYOff = DrawVerticalMenu(160, menuYOff, "DRC Info", 0xf11b, selectedSection == DRC_INFO);
