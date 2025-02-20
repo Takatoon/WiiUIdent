@@ -83,15 +83,14 @@ const char desc[] =
     "but personally identifying information will be kept confidential.\n";
 
 const char infoDetails[] =
-    "Information that will be submitted:\n"
-    "\uff65 System model and serial number (excluding the last 3 digits)\n"
-    "\uff65 Manufacturing date\n"
-    "\uff65 Region information\n"
-    "\uff65 Security level (keyset), sataDevice, consoleType, BSP revision\n"
-    "\uff65 boardType, boardRevision, bootSource, ddr3Size, ddr3Speed, ddr3Vendor\n"
-    "\uff65 MLC manufacturer, revision, name, size, and CID\n"
-    "\uff65 Device certificate and SHA-256 hash of OTP (to prevent duplicates)\n"
-    "\uff64 MS, CA, NG, and NG key IDs\n"
+    "\u25c9 System model and serial number (excluding the last 3 digits)\n"
+    "\u25c9 Manufacturing date\n"
+    "\u25c9 Region information\n"
+    "\u25c9 Security level (keyset), sataDevice, consoleType, BSP revision\n"
+    "\u25c9 boardType, boardRevision, bootSource, ddr3Size, ddr3Speed, ddr3Vendor\n"
+    "\u25c9 MLC manufacturer, revision, name, size, and CID\n"
+    "\u25c9 Device certificate and SHA-256 hash of OTP (to prevent duplicates)\n"
+    "\u25c9 MS, CA, NG, and NG key IDs\n"
     "\n"
     "Do you want to submit your console's system data?\n";
 }
@@ -121,12 +120,15 @@ void SubmitScreen::Draw()
             bool isSelected = (id == selected); 
             SDL_Color colorBorder;
             SDL_Color colorBck;
+            SDL_Color colorTxt;
             if (isSelected) {
                 colorBorder = Gfx::COLOR_BARS;
-                colorBck = Gfx::COLOR_ALT_BACKGROUND;
+                colorBck = Gfx::COLOR_ALT_ACCENT;
+                colorTxt = Gfx::COLOR_WHITE;
             } else {
-                colorBorder = Gfx::COLOR_ALT_TEXT;
+                colorBorder = Gfx::COLOR_TEXT;
                 colorBck = Gfx::COLOR_BACKGROUND;
+                colorTxt = Gfx::COLOR_TEXT;
             }
 
             int xOff = 330 + static_cast<int>(id) * 740;
@@ -139,8 +141,8 @@ void SubmitScreen::Draw()
             Gfx::DrawRectFilled(xOff, 725, btnWidth, 120, colorBorder);
             Gfx::DrawRectFilled(xOff + 9, 725 + 9, 530 - 18, 120 - 18, colorBck);
 
-            Gfx::DrawIcon(btnTextX, 774 + 10, 40, Gfx::COLOR_ALT_TEXT, entries[id].icon, Gfx::ALIGN_VERTICAL);
-            Gfx::Print(btnTextX + iconWidth, 774 + 10, 32, Gfx::COLOR_ALT_TEXT, entries[id].name, Gfx::ALIGN_VERTICAL);
+            Gfx::DrawIcon(btnTextX, 774 + 10, 40, colorTxt, entries[id].icon, Gfx::ALIGN_VERTICAL);
+            Gfx::Print(btnTextX + iconWidth, 774 + 10, 32, colorTxt, entries[id].name, Gfx::ALIGN_VERTICAL);
         }
 
         DrawBottomBar("\ue07e Navigate", "\ue044 Exit", "\ue001 Back / \ue000 Select");
@@ -200,11 +202,11 @@ bool SubmitScreen::Update(VPADStatus& input)
             }
             if (selected == MENU_ID_VIEW_DATA) {
                 mMessageBox = std::make_unique<MessageBox>(
-                    "You have unsaved changes!",
+                    "Information that will be submitted",
                     infoDetails,
                     std::vector{
                         MessageBox::Option{0, "\ue001 Back", [this]() {} },
-                        MessageBox::Option{0xf00d, "SUBMIT DATA", [this]() {
+                        MessageBox::Option{0xf0ee, "Submit data", [this]() {
                             state = STATE_SUBMITTING;
                         }},
                     }
