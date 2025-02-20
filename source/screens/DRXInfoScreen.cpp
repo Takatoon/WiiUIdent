@@ -100,10 +100,12 @@ DRXInfoScreen::DRXInfoScreen() : selectedSection(DRC_INFO)
     if (GetEepromValue(0x100, std::span(std::addressof(boardInfo), 1))) {
         uint8_t mainVersion = boardInfo & 0xf;
         uint8_t subVersion = boardInfo >> 4;
-        mDRCList.push_back({"Board Version:", Utils::sprintf("%d.%d (0x%02x)", mainVersion, subVersion, boardInfo)});
-        mDRCList.push_back({"", Utils::sprintf("(%s / %s)",
+        std::string boardVersionText = Utils::sprintf("%d.%d (0x%02x)", mainVersion, subVersion, boardInfo);
+        std::string boardVersionDetails = Utils::sprintf("(%s / %s)",
             mainVersion < 0xf ? kBoardMainVersions[mainVersion] : "UNKNOWN",
-            subVersion < 0xc ? kBoardSubVersions[subVersion] : "UNKNOWN")});
+            subVersion < 0xc ? kBoardSubVersions[subVersion] : "UNKNOWN");
+
+        mDRCList.push_back({"Board Version:", {boardVersionText + " " + boardVersionDetails, false}});
     } else {
         mDRCList.push_back({"GetEepromValue failed", ""});
     }
@@ -172,8 +174,8 @@ void DRXInfoScreen::Draw()
 
     int menuYOff = 233;
     menuYOff = DrawVerticalMenu(160, menuYOff, "DRC Info", 0xf11b, selectedSection == DRC_INFO);
-    menuYOff = DrawVerticalMenu(160, menuYOff, "DRC Ext IDs", 0xf0cb, selectedSection == DRC_EXT);
     menuYOff = DrawVerticalMenu(160, menuYOff, "DRH Info", 0xf2db, selectedSection == DRH_INFO);
+    menuYOff = DrawVerticalMenu(160, menuYOff, "DRC Ext IDs", 0xf0cb, selectedSection == DRC_EXT);
 
     int contentYOff = 255;
     switch (selectedSection) {
