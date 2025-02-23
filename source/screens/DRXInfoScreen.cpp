@@ -1,5 +1,6 @@
 #include "DRXInfoScreen.hpp"
 #include "Gfx.hpp"
+#include "Audio.hpp"
 #include "Utils.hpp"
 #include <span>
 #include <map>
@@ -198,15 +199,18 @@ void DRXInfoScreen::Draw()
 bool DRXInfoScreen::Update(VPADStatus& input)
 {
     if (input.trigger & VPAD_BUTTON_B) {
+        Audio::PlaySound(Audio::BACK);
         return false;
     }
 
     if (input.trigger & VPAD_BUTTON_DOWN) {
         if (selectedSection < SECTION_COUNT - 1) {
+            Audio::PlaySound(Audio::NAVIGATE);
             selectedSection = static_cast<MenuSection>(selectedSection + 1);
         }
     } else if (input.trigger & VPAD_BUTTON_UP) {
         if (selectedSection > 0) {
+            Audio::PlaySound(Audio::NAVIGATE);
             selectedSection = static_cast<MenuSection>(selectedSection - 1);
         }
     }

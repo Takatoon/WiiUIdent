@@ -1,5 +1,6 @@
 #include "MenuScreen.hpp"
 #include "Gfx.hpp"
+#include "Audio.hpp"
 #include "AboutScreen.hpp"
 #include "DRXInfoScreen.hpp"
 #include "GeneralScreen.hpp"
@@ -77,7 +78,6 @@ void MenuScreen::Draw()
         }
 
     }
-
     DrawBottomBar("\ue07d Navigate", "\ue044 Exit", "\ue000 Select");
     Gfx::Print(139, Gfx::SCREEN_HEIGHT - 100 / 2, 36, Gfx::COLOR_TEXT, "\ue07e", Gfx::ALIGN_VERTICAL); // A little hacky, but it works
 
@@ -95,20 +95,25 @@ bool MenuScreen::Update(VPADStatus& input)
 
     if (input.trigger & VPAD_BUTTON_RIGHT) {
         if (selected < MENU_ID_MAX - 1) {
+            Audio::PlaySound(Audio::NAVIGATE);
             selected = static_cast<MenuID>(selected + 1);
         }
     } else if (input.trigger & VPAD_BUTTON_LEFT) {
         if (selected > MENU_ID_MIN && selected < MENU_ID_ABOUT) {
+            Audio::PlaySound(Audio::NAVIGATE);
             selected = static_cast<MenuID>(selected - 1);
         }
     } else if (input.trigger & VPAD_BUTTON_DOWN) {
         gSelected = selected;
+        Audio::PlaySound(Audio::NAVIGATE);
         selected = MENU_ID_ABOUT;
     } else if (input.trigger & VPAD_BUTTON_UP) {
+        Audio::PlaySound(Audio::NAVIGATE);
         selected = gSelected;
     }
 
     if (input.trigger & VPAD_BUTTON_A) {
+        Audio::PlaySound(Audio::SELECT);
         switch (selected) {
         case MENU_ID_GENERAL:
             subscreen = std::make_unique<GeneralScreen>();

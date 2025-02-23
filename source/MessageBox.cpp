@@ -16,6 +16,7 @@
  */
 #include "MessageBox.hpp"
 #include "Gfx.hpp"
+#include "Audio.hpp"
 // #include "ThemeUtils.hpp"
 
 MessageBox::MessageBox(const std::string& title, const std::string& message, const std::vector<Option> options)
@@ -76,20 +77,24 @@ void MessageBox::Draw()
 bool MessageBox::Update(VPADStatus& input)
 {
     if (input.trigger & VPAD_BUTTON_B) {
+        Audio::PlaySound(Audio::BACK);
         return false;
     }
 
     if (input.trigger & VPAD_BUTTON_A) {
+        Audio::PlaySound(Audio::SELECT);
         mOptions[mSelected].callback();
         return false;
     }
 
     if (input.trigger & VPAD_BUTTON_RIGHT) {
         if (mSelected < mOptions.size() - 1) {
+            Audio::PlaySound(Audio::NAVIGATE);
             mSelected++;
         }
     } else if (input.trigger & VPAD_BUTTON_LEFT) {
         if (mSelected > 0) {
+            Audio::PlaySound(Audio::NAVIGATE);
             mSelected--;
         }
     }

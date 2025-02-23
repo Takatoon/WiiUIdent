@@ -1,5 +1,6 @@
 #include "SubmitScreen.hpp"
 #include "Gfx.hpp"
+#include "Audio.hpp"
 #include "Utils.hpp"
 #include "system/OTP.hpp"
 #include "system/SEEPROM.hpp"
@@ -190,6 +191,7 @@ bool SubmitScreen::Update(VPADStatus& input)
 
         if (mMessageBox) {
             if (!mMessageBox->Update(input)) {
+                Audio::PlaySound(Audio::SELECT);
                 mMessageBox.reset();
             }
 
@@ -198,9 +200,11 @@ bool SubmitScreen::Update(VPADStatus& input)
 
         if (input.trigger & VPAD_BUTTON_A) {
             if (selected == MENU_ID_SEND_DATA) {
+                Audio::PlaySound(Audio::SELECT);
                 state = STATE_SUBMITTING;
             }
             if (selected == MENU_ID_VIEW_DATA) {
+                Audio::PlaySound(Audio::SELECT);
                 mMessageBox = std::make_unique<MessageBox>(
                     "Information that will be submitted",
                     infoDetails,
@@ -213,13 +217,16 @@ bool SubmitScreen::Update(VPADStatus& input)
                 );
             }
         } else if (input.trigger & VPAD_BUTTON_B) {
+            Audio::PlaySound(Audio::BACK);
             return false;
         } else if (input.trigger & VPAD_BUTTON_LEFT) {
             if (selected > MENU_ID_MIN) {
+                Audio::PlaySound(Audio::NAVIGATE);
                 selected = static_cast<MenuID>(selected - 1);
             }
         } else if (input.trigger & VPAD_BUTTON_RIGHT) {
             if (selected < MENU_ID_MAX) {
+                Audio::PlaySound(Audio::NAVIGATE);
                 selected = static_cast<MenuID>(selected + 1);
             }
         }
@@ -228,6 +235,7 @@ bool SubmitScreen::Update(VPADStatus& input)
         state = STATE_SUBMITTED;
     } else if (state == STATE_SUBMITTED) {
         if (input.trigger & VPAD_BUTTON_B) {
+            Audio::PlaySound(Audio::BACK);
             return false;
         }
     }
