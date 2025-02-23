@@ -53,7 +53,7 @@ static void read_wav(const char* path, std::vector<uint16_t>& samples) {
     }
 
     // Create a buffer to store the file data
-    std::vector<unsigned char> buffer(size); /
+    std::vector<unsigned char> buffer(size);
     auto res = fread(buffer.data(), size, 1, fd); // Read all bytes from the file into the buffer
     fclose(fd);
     if (res != 1) {
@@ -120,6 +120,7 @@ static void read_wav(const char* path, std::vector<uint16_t>& samples) {
 }
 
 static void setup_voice(AXVoice* voice, const std::vector<uint16_t>& samples) {
+    // Configure voice
     AXVoiceVeData vol = {
         .volume = 0x4CCC, 
     };
