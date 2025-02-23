@@ -9,6 +9,7 @@
 #include <padscore/kpad.h>
 #include <sndcore2/core.h>
 
+#include "Audio.hpp"
 namespace
 {
 
@@ -138,6 +139,7 @@ int main(int argc, char const* argv[])
     WPADEnableURCC(TRUE);
 
     Gfx::Init();
+    Audio::Init();
 
     std::unique_ptr<Screen> mainScreen = std::make_unique<MainScreen>();
 
@@ -164,6 +166,7 @@ int main(int argc, char const* argv[])
     mainScreen.reset();
 
     Gfx::Shutdown();
+    Audio::Shutdown();
 
     AXQuit();
 
