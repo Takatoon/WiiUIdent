@@ -1,4 +1,5 @@
 #include "Gfx.hpp"
+#include "Audio.hpp"
 #include "screens/MainScreen.hpp"
 #include <memory>
 
@@ -9,7 +10,7 @@
 #include <padscore/kpad.h>
 #include <sndcore2/core.h>
 
-#include "Audio.hpp"
+#include <SDL2/SDL2_framerate.h>
 namespace
 {
 
@@ -143,6 +144,11 @@ int main(int argc, char const* argv[])
 
     std::unique_ptr<Screen> mainScreen = std::make_unique<MainScreen>();
 
+    // Framerate 60fps
+    FPSmanager fpsManager;
+    SDL_initFramerate(&fpsManager);
+    SDL_setFramerate(&fpsManager, 60);
+
     while (WHBProcIsRunning()) {
         VPADStatus input{};
         VPADRead(VPAD_CHAN_0, &input, 1, nullptr);
@@ -161,6 +167,8 @@ int main(int argc, char const* argv[])
 
         mainScreen->Draw();
         Gfx::Render();
+
+        SDL_framerateDelay(&fpsManager);
     }
 
     mainScreen.reset();
