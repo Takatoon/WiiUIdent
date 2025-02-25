@@ -106,12 +106,16 @@ bool MenuScreen::Update(VPADStatus& input)
             selected = static_cast<MenuID>(selected - 1);
         }
     } else if (input.trigger & VPAD_BUTTON_DOWN) {
-        gSelected = selected;
-        Audio::PlaySound(Audio::NAVIGATE);
-        selected = MENU_ID_ABOUT;
+        if (selected < MENU_ID_MAX ) {
+            gSelected = selected;
+            Audio::PlaySound(Audio::NAVIGATE);
+            selected = MENU_ID_ABOUT;
+        }
     } else if (input.trigger & VPAD_BUTTON_UP) {
-        Audio::PlaySound(Audio::NAVIGATE);
-        selected = gSelected;
+        if (selected == MENU_ID_ABOUT) {
+            Audio::PlaySound(Audio::NAVIGATE);
+            selected = gSelected;
+        }
     }
 
     if (input.trigger & VPAD_BUTTON_A) {
