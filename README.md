@@ -34,8 +34,8 @@ I chose WiiuIdent because it seems simpler than [Koopair](https://github.com/Gar
 
 ## Possible Future Improvements
 
-- Add animations.
-- Add navigational sounds.
+- ~~Add animations.~~. Added framerate control & bliking color for selected items. Screen change animation & move animation pending
+- ~~Add navigational sounds.~~ Added navigational sound. Maybe i will change the sound effects.
 
 ## Credits
 
