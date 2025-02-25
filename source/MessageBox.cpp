@@ -40,7 +40,7 @@ void MessageBox::Draw()
     Gfx::DrawRectFilled(128, 128, Gfx::SCREEN_WIDTH - 256, Gfx::SCREEN_HEIGHT - 256, Gfx::COLOR_ALT_BACKGROUND);
 
     // Print message
-    Gfx::Print(Gfx::SCREEN_WIDTH / 2, 128 + 64, 64, Gfx::COLOR_TEXT, mTitle, Gfx::ALIGN_HORIZONTAL | Gfx::ALIGN_TOP);
+    Gfx::Print(Gfx::SCREEN_WIDTH / 2, 128 + 44, 64, Gfx::COLOR_TEXT, mTitle, Gfx::ALIGN_HORIZONTAL | Gfx::ALIGN_TOP);
     Gfx::Print(Gfx::SCREEN_WIDTH / 2 - ( Gfx::GetTextWidth(40, mMessage) / 2) , 128 + 64 + Gfx::GetTextHeight(64, mTitle) + 8, 40, Gfx::COLOR_TEXT, mMessage);
 
     uint32_t xSize = Gfx::SCREEN_WIDTH - 256;
@@ -50,7 +50,7 @@ void MessageBox::Draw()
     Gfx::DrawRectFilled(128, Gfx::SCREEN_HEIGHT - 256, Gfx::SCREEN_WIDTH - 256, 2, Gfx::COLOR_WHITE);
     
     SDL_Color pulsatingColor = Gfx::GetAnimatedColor(Gfx::COLOR_BARS, { 0x27, 0x3F, 0x33, 0xFF }, 0.5f);
-    
+
     for (size_t i = 0; i < mOptions.size(); i++) {
         if (i != mSelected && i != mOptions.size() - 1) {
             Gfx::DrawRectFilled(xOff + xSize - 2, Gfx::SCREEN_HEIGHT - 256, 2, 128, Gfx::COLOR_WHITE);
