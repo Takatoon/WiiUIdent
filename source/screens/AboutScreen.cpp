@@ -21,6 +21,7 @@ AboutScreen::~AboutScreen()
 
 void AboutScreen::Draw()
 {
+    
     // Left sidebar
     Gfx::DrawRectFilled(0, 127, 612, 851, { 0x32, 0x32, 0x32, 0xff });
         

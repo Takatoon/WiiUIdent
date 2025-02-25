@@ -34,6 +34,8 @@ void MenuScreen::Draw()
         return;
     }
 
+    SDL_Color pulsatingColor = Gfx::GetAnimatedColor(Gfx::COLOR_BARS, { 0x27, 0x3F, 0x33, 0xFF }, 0.5f);
+    
     DrawTopBar(nullptr);
 
     // draw entries
@@ -43,7 +45,7 @@ void MenuScreen::Draw()
             uint32_t xOff = 332 + static_cast<int>(id) * 322;
 
             if (id == selected) {
-                Gfx::DrawRectFilled(xOff - 20, 270 - 20, 284 + 40, 284 + 40, Gfx::COLOR_BARS);
+                Gfx::DrawRectFilled(xOff - 20, 270 - 20, 284 + 40, 284 + 40, pulsatingColor);
                 Gfx::DrawRectFilled(xOff - 11, 270 - 11, 284 + 22, 284 + 22, Gfx::COLOR_ALT_ACCENT);
                 if (xOff + Gfx::GetTextWidth(48,entries[id].name) > Gfx::SCREEN_WIDTH) {
                     Gfx::Print(xOff + 284 + 20, 610, 48, Gfx::COLOR_TEXT, entries[id].name, Gfx::ALIGN_VERTICAL | Gfx::ALIGN_RIGHT);
@@ -62,7 +64,7 @@ void MenuScreen::Draw()
         } else {
     
             if (id == selected) {
-                Gfx::DrawRectFilled(900 - 15, 735 - 15, 120 + 30, 120 + 30, Gfx::COLOR_BARS);
+                Gfx::DrawRectFilled(900 - 15, 735 - 15, 120 + 30, 120 + 30, pulsatingColor);
                 Gfx::DrawRectFilled(900 - 6, 735 - 6, 120 + 12, 120 + 12, Gfx::COLOR_ALT_ACCENT);
                 Gfx::Print(900 + 120 / 2, 735 + 120 + 56, 48, Gfx::COLOR_TEXT, entries[id].name, Gfx::ALIGN_VERTICAL | Gfx::ALIGN_CENTER);
                 Gfx::DrawIcon(900 + 60 , 735 + 60 , 64, Gfx::COLOR_WHITE, entries[id].icon);

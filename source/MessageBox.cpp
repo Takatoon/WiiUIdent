@@ -48,13 +48,16 @@ void MessageBox::Draw()
     uint32_t xOff = 128;
     
     Gfx::DrawRectFilled(128, Gfx::SCREEN_HEIGHT - 256, Gfx::SCREEN_WIDTH - 256, 2, Gfx::COLOR_WHITE);
+    
+    SDL_Color pulsatingColor = Gfx::GetAnimatedColor(Gfx::COLOR_BARS, { 0x27, 0x3F, 0x33, 0xFF }, 0.5f);
+    
     for (size_t i = 0; i < mOptions.size(); i++) {
         if (i != mSelected && i != mOptions.size() - 1) {
             Gfx::DrawRectFilled(xOff + xSize - 2, Gfx::SCREEN_HEIGHT - 256, 2, 128, Gfx::COLOR_WHITE);
         } 
 
         if (i == mSelected) {
-            Gfx::DrawRectFilled(xOff - 8, Gfx::SCREEN_HEIGHT - 256 - 8, xSize + 16, 128 + 16, Gfx::COLOR_BARS);
+            Gfx::DrawRectFilled(xOff - 8, Gfx::SCREEN_HEIGHT - 256 - 8, xSize + 16, 128 + 16, pulsatingColor);
             Gfx::DrawRectFilled(xOff, Gfx::SCREEN_HEIGHT - 256, xSize, 128, Gfx::COLOR_ALT_ACCENT);
         }
         

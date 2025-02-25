@@ -111,6 +111,8 @@ SubmitScreen::~SubmitScreen()
 
 void SubmitScreen::Draw()
 {
+    SDL_Color pulsatingColor = Gfx::GetAnimatedColor(Gfx::COLOR_BARS, { 0x27, 0x3F, 0x33, 0xFF }, 0.5f);
+
     DrawTopBar("Submit System Information");
 
     if (state == STATE_INFO) {
@@ -123,7 +125,7 @@ void SubmitScreen::Draw()
             SDL_Color colorBck;
             SDL_Color colorTxt;
             if (isSelected) {
-                colorBorder = Gfx::COLOR_BARS;
+                colorBorder = pulsatingColor;
                 colorBck = Gfx::COLOR_ALT_ACCENT;
                 colorTxt = Gfx::COLOR_WHITE;
             } else {
@@ -177,7 +179,7 @@ void SubmitScreen::Draw()
                     "https://" DATABASE_URL "/", Gfx::ALIGN_CENTER);  
             }
         } else {
-                        Gfx::DrawIcon(Gfx::SCREEN_WIDTH / 2 , 285 , 128, Gfx::COLOR_ALT_TEXT, 0xf071, Gfx::ALIGN_CENTER | Gfx::ALIGN_VERTICAL);
+            Gfx::DrawIcon(Gfx::SCREEN_WIDTH / 2 , 285 , 128, Gfx::COLOR_ALT_TEXT, 0xf071, Gfx::ALIGN_CENTER | Gfx::ALIGN_VERTICAL);
             Gfx::Print(Gfx::SCREEN_WIDTH / 2, 424, 40, Gfx::COLOR_TEXT, "No response.", Gfx::ALIGN_CENTER);
         }
 

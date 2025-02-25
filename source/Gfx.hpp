@@ -22,6 +22,10 @@ constexpr SDL_Color COLOR_BARS             = { 0x0d, 0x5e, 0x36, 0xff };
 constexpr SDL_Color COLOR_ERROR            = { 0xff, 0x33, 0x33, 0xff };
 constexpr SDL_Color COLOR_WIIU             = { 0x00, 0x95, 0xc7, 0xff };
 
+SDL_Color InterpolateColor(SDL_Color color1, SDL_Color color2, float t);
+SDL_Color GetAnimatedColor(SDL_Color color1, SDL_Color color2, float frequency = 1.0f);
+
+
 enum AlignFlags {
     ALIGN_LEFT            =   1 << 0,
     ALIGN_RIGHT           =   1 << 1,

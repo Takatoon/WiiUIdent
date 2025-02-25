@@ -285,5 +285,22 @@ int GetTextHeight(int size, std::string text, bool monospace)
     return FC_GetHeight(GetFontForSize(size), "%s", text.c_str()) * scale;
 }
 
+SDL_Color InterpolateColor(SDL_Color color1, SDL_Color color2, float t)
+{
+    SDL_Color result;
+    result.r = static_cast<Uint8>(color1.r + t * (color2.r - color1.r));
+    result.g = static_cast<Uint8>(color1.g + t * (color2.g - color1.g));
+    result.b = static_cast<Uint8>(color1.b + t * (color2.b - color1.b));
+    result.a = static_cast<Uint8>(color1.a + t * (color2.a - color1.a));
+    return result;
+}
+
+SDL_Color GetAnimatedColor(SDL_Color color1, SDL_Color color2, float frequency)
+{
+    float time = SDL_GetTicks() / 1000.0f; 
+    float t = (std::sin(time * frequency * 2.0f * M_PI) * 0.5f + 0.5f);
+    return InterpolateColor(color1, color2, t);
+}
+
 }
 

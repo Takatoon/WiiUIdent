@@ -79,10 +79,11 @@ int Screen::DrawList(int x, int y, int w, ScreenList items)
 
 int Screen::DrawVerticalMenu(int x, int y, const char* text, int icon, bool selected)
 {
+    SDL_Color pulsatingColor = Gfx::GetAnimatedColor(Gfx::COLOR_BARS, { 0x27, 0x3F, 0x33, 0xFF }, 0.5f);
     SDL_Color color = selected ? Gfx::COLOR_WHITE : Gfx::COLOR_TEXT;
     
     if (selected) {
-        Gfx::DrawRectFilled(x - 38 , y - 42, 466, 122, Gfx::COLOR_BARS);
+        Gfx::DrawRectFilled(x - 38 , y - 42, 466, 122, pulsatingColor);
         Gfx::DrawRectFilled(x - 38 + 9 , y - 42 + 9, 466 - 18, 122 - 18, Gfx::COLOR_ALT_ACCENT);
         Gfx::DrawRectFilled(x - 38 + 20 , y - 20, 6, 77, Gfx::COLOR_BARS);
     } 
